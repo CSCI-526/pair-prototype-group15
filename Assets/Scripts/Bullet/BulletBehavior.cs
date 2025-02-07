@@ -22,7 +22,7 @@ public class BulletBehavior : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (numBounces == 0)
+        if (numBounces == 0 || collision.gameObject.CompareTag("Player"))
         {
             Destroy(gameObject);
         }
