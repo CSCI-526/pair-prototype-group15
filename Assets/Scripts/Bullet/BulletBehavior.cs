@@ -25,6 +25,7 @@ public class BulletBehavior : MonoBehaviour
         if (numBounces == 0 || collision.gameObject.CompareTag("Player"))
         {
             Destroy(gameObject);
+            // tesgt
         }
         --numBounces;
 
