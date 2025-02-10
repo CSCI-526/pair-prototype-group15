@@ -18,7 +18,10 @@ public class BulletCollision : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D obj){
         if(obj.CompareTag("Bullet")){
+            BulletBehavior bulletScript = obj.GetComponent<BulletBehavior>();
+
             Destroy(gameObject);
+            bulletScript.IncreaseSpeed();
         }
     }
 }

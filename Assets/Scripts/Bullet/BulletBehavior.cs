@@ -30,10 +30,15 @@ public class BulletBehavior : MonoBehaviour
         --numBounces;
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
+        if (rb != null && !collision.gameObject.CompareTag("InnerWall"))
         {
             Vector2 normal = collision.contacts[0].normal;
             UpdateDirection(Vector2.Reflect(direction.normalized, normal).normalized);
         }
+    }
+
+    public void IncreaseSpeed(){
+        bulletSpeed += 1.0f;
+        rb.velocity = this.direction * bulletSpeed;
     }
 }
