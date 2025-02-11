@@ -15,23 +15,27 @@ public class BulletBehavior : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
     }
+
     public void UpdateDirection(Vector2 newDirection)
     {
         this.direction = newDirection;
         rb.velocity = this.direction * bulletSpeed;
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (numBounces == 0 || collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.GetComponent<PlayerHealth>().TakeDamage();
+            Destroy(gameObject);
+        }
+        else if (numBounces == 0)
         {
             Destroy(gameObject);
-            // tesgt
         }
-        --numBounces;
-
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
+        else
         {
+            --numBounces;
             Vector2 normal = collision.contacts[0].normal;
             UpdateDirection(Vector2.Reflect(direction.normalized, normal).normalized);
         }
