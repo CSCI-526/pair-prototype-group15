@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private KeyCode shootKey;
     private bool bCanShoot = true;
     private bool bIsSplitShot;
+    private Coroutine powerupCoroutine;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,15 +34,15 @@ public class PlayerMovement : MonoBehaviour
         moveUp = bIsPlayerOne ? KeyCode.W : KeyCode.UpArrow;
         moveDown = bIsPlayerOne ? KeyCode.S : KeyCode.DownArrow;
         shootKey = bIsPlayerOne ? KeyCode.V : KeyCode.Slash;
-        Powerup.powerupConsumed += OnPowerupUsed;
+        Powerup.onPowerupConsumed += OnPowerupUsed;
     }
     private void OnDisable()
     {
-        Powerup.powerupConsumed -= OnPowerupUsed;
+        Powerup.onPowerupConsumed -= OnPowerupUsed;
     }
     private void OnDestroy()
     {
-        Powerup.powerupConsumed -= OnPowerupUsed;
+        Powerup.onPowerupConsumed -= OnPowerupUsed;
     }
     // Update is called once per frame
     void Update()
@@ -71,12 +72,20 @@ public class PlayerMovement : MonoBehaviour
             transform.Translate(0, -movementSpeed * Time.fixedDeltaTime, 0);
         }
     }
-    private void OnPowerupUsed(PowerupType powerupType, float powerupDuration) 
+    private void OnPowerupUsed(GameObject caller, PowerupType powerupType, float powerupDuration) 
     {
-        if(powerupType == PowerupType.POWERUP_SPLITSHOT)
+        if (!caller || caller != gameObject)
         {
+            return;
+        }
+        if (powerupType == PowerupType.POWERUP_SPLITSHOT)
+        {
+            if(powerupCoroutine != null)
+            {
+                StopCoroutine(powerupCoroutine);
+            }
             bIsSplitShot = true;
-            StartCoroutine(PowerupTimer(powerupDuration));
+            powerupCoroutine = StartCoroutine(PowerupTimer(powerupDuration));
         }
     }
 
@@ -85,12 +94,13 @@ public class PlayerMovement : MonoBehaviour
         bCanShoot = false;
         if (bIsSplitShot)
         {
-            Quaternion leftRotation = Quaternion.Euler(0, -30f, 0);
-            Quaternion rightRotation = Quaternion.Euler(0, 30f, 0);
-            GameObject bulletOne = Instantiate(bulletPrefab, firePoint.position, transform.rotation * leftRotation);
-            bulletOne.GetComponent<BulletBehavior>().UpdateDirection(firePoint.up.normalized);
-            GameObject bulletTwo = Instantiate(bulletPrefab, firePoint.position, transform.rotation * rightRotation);
-            bulletTwo.GetComponent<BulletBehavior>().UpdateDirection(firePoint.up.normalized);
+
+            Quaternion leftRotation = Quaternion.Euler(0, 0, -30f);
+            Quaternion rightRotation = Quaternion.Euler(0, 0, 30f);
+            GameObject bulletOne = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+            bulletOne.GetComponent<BulletBehavior>().UpdateDirection(leftRotation * firePoint.up.normalized);
+            GameObject bulletTwo = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            bulletTwo.GetComponent<BulletBehavior>().UpdateDirection(rightRotation * firePoint.up.normalized);
         }
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         bullet.GetComponent<BulletBehavior>().UpdateDirection(firePoint.up.normalized);

@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 public enum PowerupType
 {
@@ -15,8 +17,7 @@ public class Powerup : MonoBehaviour
     PowerupType powerupType = PowerupType.POWERUP_NONE;
     [SerializeField]
     private float powerupDuration = 2.0f;
-    public delegate void OnPowerupConsumed(PowerupType powerupType, float powerupDuration);
-    public static event OnPowerupConsumed powerupConsumed;
+    public static event Action<GameObject, PowerupType, float> onPowerupConsumed;
     protected GameObject spawnerParent;
     
     public void SetSpawnerParent(GameObject parent)
@@ -28,12 +29,12 @@ public class Powerup : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             // Give player powerup / effect
-            powerupConsumed?.Invoke(powerupType, powerupDuration);
-            PowerupConsumed();
+            PowerupConsumed(collision.gameObject);
         }
     }
-    protected void PowerupConsumed()
+    protected void PowerupConsumed(GameObject caller)
     {
+        onPowerupConsumed?.Invoke(caller, powerupType, powerupDuration);
         // tell parent that it's child has been consumed 
         PowerupSpawner powerupSpawner = spawnerParent.GetComponent<PowerupSpawner>();
         if (powerupSpawner)
@@ -42,9 +43,5 @@ public class Powerup : MonoBehaviour
         }
         // destroy this
         Destroy(gameObject);
-    }
-    private void OnDestroy()
-    {
-        powerupConsumed = null;
     }
 }
