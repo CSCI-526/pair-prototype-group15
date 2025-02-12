@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private KeyCode moveDown;
     private KeyCode shootKey;
     private bool bCanShoot = true;
+    private bool bIsSplitShot;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,8 +33,16 @@ public class PlayerMovement : MonoBehaviour
         moveUp = bIsPlayerOne ? KeyCode.W : KeyCode.UpArrow;
         moveDown = bIsPlayerOne ? KeyCode.S : KeyCode.DownArrow;
         shootKey = bIsPlayerOne ? KeyCode.V : KeyCode.Slash;
+        Powerup.powerupConsumed += OnPowerupUsed;
     }
-
+    private void OnDisable()
+    {
+        Powerup.powerupConsumed -= OnPowerupUsed;
+    }
+    private void OnDestroy()
+    {
+        Powerup.powerupConsumed -= OnPowerupUsed;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -62,12 +71,30 @@ public class PlayerMovement : MonoBehaviour
             transform.Translate(0, -movementSpeed * Time.fixedDeltaTime, 0);
         }
     }
+    private void OnPowerupUsed(PowerupType powerupType, float powerupDuration) 
+    {
+        if(powerupType == PowerupType.POWERUP_SPLITSHOT)
+        {
+            bIsSplitShot = true;
+            StartCoroutine(PowerupTimer(powerupDuration));
+        }
+    }
 
     private void Shoot()
     {
         bCanShoot = false;
+        if (bIsSplitShot)
+        {
+            Quaternion leftRotation = Quaternion.Euler(0, -30f, 0);
+            Quaternion rightRotation = Quaternion.Euler(0, 30f, 0);
+            GameObject bulletOne = Instantiate(bulletPrefab, firePoint.position, transform.rotation * leftRotation);
+            bulletOne.GetComponent<BulletBehavior>().UpdateDirection(firePoint.up.normalized);
+            GameObject bulletTwo = Instantiate(bulletPrefab, firePoint.position, transform.rotation * rightRotation);
+            bulletTwo.GetComponent<BulletBehavior>().UpdateDirection(firePoint.up.normalized);
+        }
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         bullet.GetComponent<BulletBehavior>().UpdateDirection(firePoint.up.normalized);
+       
         StartCoroutine(ShootingCooldown());
     }
 
@@ -80,5 +107,16 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         bCanShoot = true;
+    }
+
+    private IEnumerator PowerupTimer(float duration)
+    {
+        float timer = 0.0f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        bIsSplitShot = false;
     }
 }

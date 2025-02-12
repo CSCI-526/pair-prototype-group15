@@ -36,8 +36,16 @@ public class BulletBehavior : MonoBehaviour
         else
         {
             --numBounces;
-            Vector2 normal = collision.contacts[0].normal;
-            UpdateDirection(Vector2.Reflect(direction.normalized, normal).normalized);
+            if (!collision.gameObject.CompareTag("InnerWall"))
+            {
+                Vector2 normal = collision.contacts[0].normal;
+                UpdateDirection(Vector2.Reflect(direction.normalized, normal).normalized);
+            }
         }
     }
-}
+
+    public void IncreaseSpeed()
+    {
+        bulletSpeed += 1.0f;
+        rb.velocity = this.direction * bulletSpeed;
+    }
