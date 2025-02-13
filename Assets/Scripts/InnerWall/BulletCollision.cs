@@ -4,24 +4,20 @@ using UnityEngine;
 
 public class BulletCollision : MonoBehaviour
 {
+    private Vector2 pos;
+    private Vector2 size = new Vector2(1, 1);
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        pos = gameObject.transform.position;
     }
 
     private void OnTriggerEnter2D(Collider2D obj){
         if(obj.CompareTag("Bullet")){
             BulletBehavior bulletScript = obj.GetComponent<BulletBehavior>();
-
-            Destroy(gameObject);
             bulletScript.IncreaseSpeed();
+
+            InnerWallManager.Instance.StartRespawnWalls(gameObject);
         }
     }
 }
