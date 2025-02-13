@@ -20,13 +20,19 @@ public class BulletBehavior : MonoBehaviour
     {
         this.direction = newDirection;
         rb.velocity = this.direction * bulletSpeed;
+        Debug.Log($"Bullet Direction: {newDirection}, Speed: {bulletSpeed}");
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.gameObject.GetComponent<PlayerHealth>().TakeDamage();
+            PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage();
+            }
             Destroy(gameObject);
         }
         else if (numBounces == 0)
@@ -49,3 +55,4 @@ public class BulletBehavior : MonoBehaviour
         bulletSpeed += 1.0f;
         rb.velocity = this.direction * bulletSpeed;
     }
+}

@@ -82,21 +82,48 @@ public class PlayerMovement : MonoBehaviour
 
     private void Shoot()
     {
+        if (bulletPrefab == null)
+        {
+            Debug.LogError("bulletPrefab is not assigned!");
+            return;
+        }
+
+        if (firePoint == null)
+        {
+            Debug.LogError("firePoint is not assigned!");
+            return;
+        }
+
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+
+        BulletBehavior bulletBehavior = bullet.GetComponent<BulletBehavior>();
+        if (bulletBehavior != null)
+        {
+            bulletBehavior.UpdateDirection(firePoint.up.normalized);
+        }
+        else
+        {
+            Debug.LogError("BulletBehavior script is missing on bulletPrefab!");
+        }
+
+        Debug.Log("Shooting bullet...");
         bCanShoot = false;
+
         if (bIsSplitShot)
         {
-            Quaternion leftRotation = Quaternion.Euler(0, -30f, 0);
-            Quaternion rightRotation = Quaternion.Euler(0, 30f, 0);
-            GameObject bulletOne = Instantiate(bulletPrefab, firePoint.position, transform.rotation * leftRotation);
-            bulletOne.GetComponent<BulletBehavior>().UpdateDirection(firePoint.up.normalized);
-            GameObject bulletTwo = Instantiate(bulletPrefab, firePoint.position, transform.rotation * rightRotation);
-            bulletTwo.GetComponent<BulletBehavior>().UpdateDirection(firePoint.up.normalized);
+            Quaternion leftRotation = Quaternion.Euler(0, 0, -30f);  // Modify Z-axis rotation
+            Quaternion rightRotation = Quaternion.Euler(0, 0, 30f);  // Modify Z-axis rotation
+
+            GameObject bulletOne = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation * leftRotation);
+            bulletOne.GetComponent<BulletBehavior>().UpdateDirection(bulletOne.transform.up.normalized);
+
+            GameObject bulletTwo = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation * rightRotation);
+            bulletTwo.GetComponent<BulletBehavior>().UpdateDirection(bulletTwo.transform.up.normalized);
         }
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-        bullet.GetComponent<BulletBehavior>().UpdateDirection(firePoint.up.normalized);
-       
+
         StartCoroutine(ShootingCooldown());
     }
+
 
     private IEnumerator ShootingCooldown()
     {
