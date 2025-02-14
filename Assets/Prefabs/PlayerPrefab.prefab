@@ -386,6 +386,7 @@ GameObject:
   - component: {fileID: 4001056249118570445}
   - component: {fileID: 3355615589745203279}
   - component: {fileID: 8403293272374722648}
+  - component: {fileID: 3407098466422067281}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -567,6 +568,20 @@ MonoBehaviour:
   powerupDurationGO: {fileID: 8219179307697075317}
   powerupDurationSlider: {fileID: 9106203439952345402}
   powerupDurationTypeText: {fileID: 1862235750535749713}
+--- !u!114 &3407098466422067281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3241499953579291894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 069ddd30108aaf840bc8c6d354b7ff9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lives: 1
+  playerName: Player
 --- !u!1 &5096437085747555300
 GameObject:
   m_ObjectHideFlags: 0
