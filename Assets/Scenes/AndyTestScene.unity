@@ -6141,6 +6141,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 4001056249118570445, guid: d162900057cba424bbc254404d48b136, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 854277511590067757, guid: 513b5392b9b2b7546b2a1bb69beb1ce6, type: 3}
     - target: {fileID: 6680531639368377605, guid: d162900057cba424bbc254404d48b136, type: 3}
       propertyPath: m_Color.b
       value: 0
@@ -6753,6 +6757,10 @@ PrefabInstance:
       propertyPath: bIsPlayerOne
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4001056249118570445, guid: d162900057cba424bbc254404d48b136, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 854277511590067757, guid: 513b5392b9b2b7546b2a1bb69beb1ce6, type: 3}
     - target: {fileID: 6680531639368377605, guid: d162900057cba424bbc254404d48b136, type: 3}
       propertyPath: m_Color.b
       value: 1
