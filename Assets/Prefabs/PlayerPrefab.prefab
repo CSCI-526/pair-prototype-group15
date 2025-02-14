@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069ddd30108aaf840bc8c6d354b7ff9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lives: 1
+  lives: 3
   playerName: Player
   shieldIcon: {fileID: 6105539768026357374}
 --- !u!1 &6105539768026357374
