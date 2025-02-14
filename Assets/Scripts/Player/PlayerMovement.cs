@@ -87,6 +87,14 @@ public class PlayerMovement : MonoBehaviour
             bIsSplitShot = true;
             powerupCoroutine = StartCoroutine(PowerupTimer(powerupDuration));
         }
+        else
+        {
+            if (powerupCoroutine != null)
+            {
+                StopCoroutine(powerupCoroutine);
+                bIsSplitShot = false;
+            }
+        }
     }
 
     private void Shoot()

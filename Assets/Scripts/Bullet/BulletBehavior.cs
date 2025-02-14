@@ -9,13 +9,25 @@ public class BulletBehavior : MonoBehaviour
     [SerializeField]
     private int numBounces = 3;
     private Vector2 direction = Vector2.zero;
+    private bool bCanDealDamage = false;
+    [SerializeField]
+    private Color activeColor;
     private Rigidbody2D rb;
-    
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
-
+    public bool GetCanDealDamage() { return bCanDealDamage; }
+    public void UpdateSpriteColor()
+    {
+        SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer>();
+        if (sprite)
+        {
+            sprite.color = activeColor;
+        }
+        bCanDealDamage = true;
+    }
     public void UpdateDirection(Vector2 newDirection)
     {
         this.direction = newDirection;
@@ -27,10 +39,10 @@ public class BulletBehavior : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         int bulletLayer = gameObject.layer;
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && bCanDealDamage)
         {
             bool bIsPlayerOneBullet = bulletLayer == GameManager.Instance.PLAYER_ONE_BULLET_LAYER;
-            if((bIsPlayerOneBullet && collision.gameObject.layer == GameManager.Instance.PLAYER_TWO_LAYER) ||
+            if ((bIsPlayerOneBullet && collision.gameObject.layer == GameManager.Instance.PLAYER_TWO_LAYER) ||
                 (!bIsPlayerOneBullet && collision.gameObject.layer == GameManager.Instance.PLAYER_ONE_LAYER))
             {
                 PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
@@ -41,17 +53,18 @@ public class BulletBehavior : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-        if (numBounces == 0)
-        {
-            Destroy(gameObject);
-        }
 
-        --numBounces;
         if (!collision.gameObject.CompareTag("InnerWall"))
         {
             Vector2 normal = collision.contacts[0].normal;
             UpdateDirection(Vector2.Reflect(direction.normalized, normal).normalized);
         }
+
+        if (numBounces == 0)
+        {
+            Destroy(gameObject);
+        }
+        --numBounces;
     }
 
     public void IncreaseSpeed()
