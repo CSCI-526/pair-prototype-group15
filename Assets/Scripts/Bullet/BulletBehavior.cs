@@ -10,7 +10,7 @@ public class BulletBehavior : MonoBehaviour
     private int numBounces = 3;
     private Vector2 direction = Vector2.zero;
     private Rigidbody2D rb;
-
+    
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -26,27 +26,31 @@ public class BulletBehavior : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        int bulletLayer = gameObject.layer;
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
+            bool bIsPlayerOneBullet = bulletLayer == GameManager.Instance.PLAYER_ONE_BULLET_LAYER;
+            if((bIsPlayerOneBullet && collision.gameObject.layer == GameManager.Instance.PLAYER_TWO_LAYER) ||
+                (!bIsPlayerOneBullet && collision.gameObject.layer == GameManager.Instance.PLAYER_ONE_LAYER))
             {
-                playerHealth.TakeDamage();
+                PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage();
+                }
+                Destroy(gameObject);
             }
-            Destroy(gameObject);
         }
-        else if (numBounces == 0)
+        if (numBounces == 0)
         {
             Destroy(gameObject);
         }
-        else
+
+        --numBounces;
+        if (!collision.gameObject.CompareTag("InnerWall"))
         {
-            --numBounces;
-            if (!collision.gameObject.CompareTag("InnerWall"))
-            {
-                Vector2 normal = collision.contacts[0].normal;
-                UpdateDirection(Vector2.Reflect(direction.normalized, normal).normalized);
-            }
+            Vector2 normal = collision.contacts[0].normal;
+            UpdateDirection(Vector2.Reflect(direction.normalized, normal).normalized);
         }
     }
 

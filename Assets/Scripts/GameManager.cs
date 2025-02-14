@@ -10,7 +10,10 @@ public class GameManager : MonoBehaviour
     // References to the two players; assign these in the Inspector
     public PlayerHealth player1;
     public PlayerHealth player2;
-
+    public int PLAYER_ONE_LAYER = 9;
+    public int PLAYER_TWO_LAYER = 10;
+    public int PLAYER_ONE_BULLET_LAYER = 11;
+    public int PLAYER_TWO_BULLET_LAYER = 12;
     private void Awake()
     {
         // Initialize the singleton instance
