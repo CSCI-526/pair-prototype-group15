@@ -1,22 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;  // index TextMeshPro
 
 public class GameManager : MonoBehaviour
 {
-    // Singleton instance for easy access from other scripts
     public static GameManager Instance;
 
-    // References to the two players; assign these in the Inspector
     public PlayerHealth player1;
     public PlayerHealth player2;
     public int PLAYER_ONE_LAYER = 9;
     public int PLAYER_TWO_LAYER = 10;
     public int PLAYER_ONE_BULLET_LAYER = 11;
     public int PLAYER_TWO_BULLET_LAYER = 12;
+
+
+    public TextMeshProUGUI player1HealthText;  // health presentation
+    public TextMeshProUGUI player2HealthText;
+    public TextMeshProUGUI gameOverText;  // gameover presentation
+
     private void Awake()
     {
-        // Initialize the singleton instance
         if (Instance == null)
         {
             Instance = this;
@@ -27,18 +31,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called when a player's lives have reached zero.
-    /// </summary>
-    /// <param name="defeatedPlayer">The player who was defeated.</param>
+    private void Start()
+    {
+        UpdateHealthUI();
+        gameOverText.gameObject.SetActive(false); // hide Game Over at beginning
+    }
+
     public void PlayerDefeated(PlayerHealth defeatedPlayer)
     {
-        // Determine the winner based on which player was defeated
         PlayerHealth winner = (defeatedPlayer == player1) ? player2 : player1;
         Debug.Log("Game Over! " + winner.playerName + " wins!");
+        ShowGameOver(winner.playerName);
+    }
 
-        // Additional game over logic can be added here, such as pausing the game,
-        // displaying a victory screen, or restarting the game.
+    private void ShowGameOver(string winnerName)
+    {
+        gameOverText.text = "GAME OVER\n" + winnerName + " Wins!";
+        gameOverText.gameObject.SetActive(true);
+        Time.timeScale = 0f; // pause the game
+    }
+
+    public void UpdateHealthUI()
+    {
+        if (player1HealthText != null)
+            player1HealthText.text = player1.playerName + " " + player1.lives + "/3";
+        if (player2HealthText != null)
+            player2HealthText.text = player2.playerName + " " + player2.lives + "/3";
     }
 }
 
