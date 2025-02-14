@@ -17,10 +17,12 @@ public class PlayerUI : MonoBehaviour
     void Start()
     {
         Powerup.onPowerupConsumed += OnPowerupUsed;
+        PlayerHealth.onShieldUsed += OnShieldUsed;
     }
     private void OnDestroy()
     {
         Powerup.onPowerupConsumed -= OnPowerupUsed;
+        PlayerHealth.onShieldUsed -= OnShieldUsed;
     }
     // Update is called once per frame
     void Update()
@@ -28,6 +30,10 @@ public class PlayerUI : MonoBehaviour
         
     }
 
+    private void OnShieldUsed()
+    {
+        powerupDurationGO.SetActive(false);
+    }
     private void OnPowerupUsed(GameObject caller, PowerupType powerupType, float powerupDuration)
     {
         if(!caller || caller != gameObject)
@@ -42,6 +48,17 @@ public class PlayerUI : MonoBehaviour
                 StopCoroutine(powerupDurationCoroutine);
             }
             powerupDurationTypeText.SetText("Split Shot");
+            powerupDurationSlider.maxValue = powerupDuration;
+            powerupDurationSlider.value = powerupDuration;
+            powerupDurationCoroutine = StartCoroutine(PowerupTimer(powerupDuration));
+        }
+        else if (powerupType == PowerupType.POWERUP_SHIELD)
+        {
+            if(powerupDurationCoroutine != null)
+            {
+                StopCoroutine (powerupDurationCoroutine);
+            }
+            powerupDurationTypeText.SetText("Shield");
             powerupDurationSlider.maxValue = powerupDuration;
             powerupDurationSlider.value = powerupDuration;
             powerupDurationCoroutine = StartCoroutine(PowerupTimer(powerupDuration));
