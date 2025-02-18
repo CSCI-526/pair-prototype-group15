@@ -4,20 +4,13 @@ using UnityEngine;
 
 public class InnerWallManager : MonoBehaviour
 {
+    
     public static InnerWallManager Instance; // Singleton pattern
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Ensures this object persists across scenes
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+        Instance = this;
+    } 
 
     public void StartRespawnWalls(GameObject obj)
     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;  // index TextMeshPro
 
 public class GameManager : MonoBehaviour
@@ -39,9 +40,14 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDefeated(PlayerHealth defeatedPlayer)
     {
-        PlayerHealth winner = (defeatedPlayer == player1) ? player2 : player1;
-        Debug.Log("Game Over! " + winner.playerName + " wins!");
-        ShowGameOver(winner.playerName);
+        if(SceneManager.GetActiveScene().name == "TutorialScene"){
+            SceneManager.LoadScene("MainMenu");
+        }
+        else{
+            PlayerHealth winner = (defeatedPlayer == player1) ? player2 : player1;
+            Debug.Log("Game Over! " + winner.playerName + " wins!");
+            ShowGameOver(winner.playerName);
+        }
     }
 
     private void ShowGameOver(string winnerName)

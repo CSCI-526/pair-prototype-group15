@@ -41,6 +41,7 @@ public class BulletBehavior : MonoBehaviour
         int bulletLayer = gameObject.layer;
         if (collision.gameObject.CompareTag("Player") && bCanDealDamage)
         {
+            
             bool bIsPlayerOneBullet = bulletLayer == GameManager.Instance.PLAYER_ONE_BULLET_LAYER;
             if ((bIsPlayerOneBullet && collision.gameObject.layer == GameManager.Instance.PLAYER_TWO_LAYER) ||
                 (!bIsPlayerOneBullet && collision.gameObject.layer == GameManager.Instance.PLAYER_ONE_LAYER))
@@ -56,15 +57,20 @@ public class BulletBehavior : MonoBehaviour
 
         if (!collision.gameObject.CompareTag("InnerWall"))
         {
+            /*
             Vector2 normal = collision.contacts[0].normal;
             UpdateDirection(Vector2.Reflect(direction.normalized, normal).normalized);
+            */
+            Destroy(gameObject);
         }
 
+        /*
         if (numBounces == 0)
         {
             Destroy(gameObject);
         }
         --numBounces;
+        */
     }
 
     public void IncreaseSpeed()
