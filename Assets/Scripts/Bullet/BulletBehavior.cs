@@ -6,8 +6,6 @@ public class BulletBehavior : MonoBehaviour
 {
     [SerializeField]
     private float bulletSpeed = 10.0f;
-    [SerializeField]
-    private int numBounces = 3;
     private Vector2 direction = Vector2.zero;
     private bool bCanDealDamage = false;
     [SerializeField]
@@ -57,20 +55,8 @@ public class BulletBehavior : MonoBehaviour
 
         if (!collision.gameObject.CompareTag("InnerWall"))
         {
-            /*
-            Vector2 normal = collision.contacts[0].normal;
-            UpdateDirection(Vector2.Reflect(direction.normalized, normal).normalized);
-            */
             Destroy(gameObject);
         }
-
-        /*
-        if (numBounces == 0)
-        {
-            Destroy(gameObject);
-        }
-        --numBounces;
-        */
     }
 
     public void IncreaseSpeed()
