@@ -9,6 +9,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private GameObject tutorialMessage2;
     [SerializeField]
+    private GameObject tutorialMessage3;
+    [SerializeField]
     private GameObject innerWalls;
     [SerializeField]
     private GameObject tutPlayer1;
@@ -21,6 +23,8 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         tutorialMessage1.SetActive(true);
+        tutorialMessage2.SetActive(false);
+        tutorialMessage3.SetActive(false);
         innerWalls.SetActive(false);
         tutPlayer1.SetActive(false);
         tutPlayer2.SetActive(false);
@@ -35,6 +39,7 @@ public class TutorialManager : MonoBehaviour
 
     public void ContinueClicked(){
         tutorialMessage2.SetActive(false);
+        tutorialMessage3.SetActive(true);
         innerWalls.SetActive(true);
         tutPlayer1.SetActive(true);
         tutPlayer2.SetActive(true);
