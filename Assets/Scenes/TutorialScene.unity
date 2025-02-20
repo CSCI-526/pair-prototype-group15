@@ -2522,7 +2522,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1689984832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2988,18 +2988,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Player 2 Controls
-
-    W - Move forward
-
-    S - Move backward
-
-    A
-    - Rotate left
-
-    D - Rotate right
-
-    / - Shoot'
+  m_text: "Player 2 Controls\n\u2191 - Move forward\n\u2193 - Move backward\n\u2190
+    - Rotate left\n\u2192 - Rotate right\n/ - Shoot"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
